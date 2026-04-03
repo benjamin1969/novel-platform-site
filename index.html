@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>灯市口小学五年级三班小说天地</title>
+    <meta name="description" content="欢迎来到灯市口小学五年级三班小说天地，阅读同学们创作的精彩小说！">
+    
+    <!-- 内联CSS样式 -->
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+        }
+        
+        /* 容器 */
+        .novel-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏 */
+        header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            background: #4f46e5;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+        
+        .logo-text p {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        /* 导航菜单 */
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: #4b5563;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+        
+        .nav-link svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* 用户操作 */
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .search-btn, .menu-btn {
+            padding: 8px;
+            border-radius: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        
+        .search-btn:hover, .menu-btn:hover {
+            background: #f3f4f6;
+        }
+        
+        .login-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #4b5563;
+            font-weight: 500;
+        }
+        
+        .login-btn:hover {
+            background: #f3f4f6;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: #e0e7ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4f46e5;
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 48px 0;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .hero-text h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .hero-text p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .hero-icon {
+            width: 64px;
+            height: 64px;
+            opacity: 0.8;
+        }
+        
+        /* 欢迎卡片 */
+        .welcome-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .welcome-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .welcome-icon {
+            background: #e0e7ff;
+            padding: 12px;
+            border-radius: 50%;
+            color: #4f46e5;
+        }
+        
+        .welcome-text h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .welcome-text p {
+            color: #6b7280;
+        }
+        
+        /* 主要内容区域 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+            margin: 32px 0;
+        }
+        
+        /* 热门小说区域 */
+        .hot-novels {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .section-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .section-icon {
+            color: #4f46e5;
+        }
+        
+        /* 小说卡片 */
+        .novel-cards {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .novel-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+        
+        .novel-card:hover {
+            border-color: #4f46e5;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+        }
+        
+        .novel-image {
+            height: 120px;
+            background: #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .novel-title {
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            width: 75%;
+        }
+        
+        .novel-author {
+            height: 16px;
+            background: #f3f4f6;
+            border-radius: 4px;
+            width: 50%;
+        }
+        
+        /* 侧边栏卡片 */
+        .sidebar-cards {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .sidebar-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7280;
+        }
+        
+        .empty-icon {
+            width: 48px;
+            height: 48px;
+            color: #d1d5db;
+            margin: 0 auto 16px;
+        }
+        
+        .empty-text {
+            margin-bottom: 8px;
+        }
+        
+        .empty-subtext {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+        
+        /* 快速链接 */
+        .quick-links {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .quick-link {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .quick-link:hover {
+            background: #f3f4f6;
+        }
+        
+        .link-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #111827;
+        }
+        
+        .link-desc {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        /* 系统状态 */
+        .status-list {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .status-label {
+            color: #4b5563;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-online {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-loading {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        /* 页脚 */
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 48px 0;
+            margin-top: 48px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .footer-logo-icon {
+            color: #8b5cf6;
+        }
+        
+        .footer-logo-text {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .footer-description {
+            color: #d1d5db;
+            margin-bottom: 16px;
+        }
+        
+        .footer-tagline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+        
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-divider {
+            border-top: 1px solid #374151;
+            margin-top: 32px;
+            padding-top: 32px;
+            text-align: center;
+            color: #9ca3af;
+        }
+        
+        .footer-copyright {
+            margin-bottom: 8px;
+        }
+        
+        .footer-tech {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 24px;
+            }
+            
+            .hero-text h1 {
+                font-size: 28px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* 动画 */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .loading {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+    
+    <!-- 内联SVG图标 -->
+    <svg style="display: none;">
+        <symbol id="icon-book" viewBox="0 0 24 24">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        </symbol>
+        <symbol id="icon-home" viewBox="0 0 24 24">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </symbol>
+        <symbol id="icon-compass" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+        </symbol>
+        <symbol id="icon-pen" viewBox="0 0 24 24">
+            <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.375 2.625a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"></path>
+        </symbol>
+        <symbol id="icon-chart" viewBox="0 0 24 24">
+            <line x1="12" x2="12" y1="20" y2="10"></line>
+            <line x1="18" x2="18" y1="20" y2="4"></line>
+            <line x1="6" x2="6" y1="20" y2="16"></line>
+        </symbol>
+        <symbol id="icon-search" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+        </symbol>
+        <symbol id="icon-user" viewBox="0 0 24 24">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+        </symbol>
+        <symbol id="icon-menu" viewBox="0 0 24 24">
+            <line x1="4" x2="20" y1="12" y2="12"></line>
+            <line x1="4" x2="20" y1="6" y2="6"></line>
+            <line x1="4" x2="20" y1="18" y2="18"></line>
+        </symbol>
+        <symbol id="icon-star" viewBox="0 0 24 24">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </symbol>
+        <symbol id="icon-trending" viewBox="0 0 24 24">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+            <polyline points="16 7 22 7 22 13"></polyline>
+        </symbol>
+        <symbol id="icon-trophy" viewBox="0 0 24 24">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+            <path d="M4 22h16"></path>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+        </symbol>
+        <symbol id="icon-sparkles" viewBox="0 0 24 24">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+            <path d="M5 3v4"></path>
+            <path d="M19 17v4"></path>
+            <path d="M3 5h4"></path>
+            <path d="M17 19h4"></path>
+        </symbol>
+        <symbol id="icon-calendar" viewBox="0 0 24 24">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+            <line x1="16" x2="16" y1="2" y2="6"></line>
+            <line x1="8" x2="8" y1="2" y2="6"></line>
+            <line x1="3" x2="21" y1="10" y2="10"></line>
+        </symbol>
+        <symbol id="icon-award" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="6"></circle>
+            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+        </symbol>
+        <symbol id="icon-heart" viewBox="0 0 24 24">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+        </symbol>
+        <symbol id="icon-users" viewBox="0 0 24 24">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </symbol>
+    </svg>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="novel-container">
+            <div class="header-content">
+                <!-- 网站Logo -->
+                <a href="/" class="logo">
+                    <div class="logo-icon">
+                        <svg width="24" height="24">
+                            <use href="#icon-book"></use>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>小说天地</h1>
+                        <p>五年级三班</p>
+                    </div>
+                </a>
+                
+                <!-- 导航菜单 -->
+                <nav class="nav-menu">
+                    <a href="/" class="nav-link">
+                        <svg width="16" height="16">
+                            <use href="#icon-home"></use>
+                        </svg>
+                        <span>首页</span>
+                    </a>
+                    <a href="/novels" class="nav-link">
+                        <svg width="16" height="16">
+                            <use href="#icon-compass"></use>
+                        </svg>
+                        <span>发现</span>
+                    </a>
+                    <a href="/publish" class="nav-link">
+                        <svg width="16" height="16">
+                            <use href="#icon-pen"></use>
+                        </svg>
+                        <span>创作</span>
+                    </a>
+                    <a href="/ranking" class="nav-link">
+                        <svg width="16" height="16">
+                            <use href="#icon-chart"></use>
+                        </svg>
+                        <span>排行榜</span>
+                    </a>
+                </nav>
+                
+                <!-- 用户操作 -->
+                <div class="user-actions">
+                    <button class="search-btn">
+                        <svg width="20" height="20">
+                            <use href="#icon-search"></use>
+                        </svg>
+                    </button>
+                    <button class="login-btn" onclick="window.location.href='/login'">
+                        <div class="user-avatar">
+                            <svg width="16" height="16">
+                                <use href="#icon-user"></use>
+                            </svg>
+                        </div>
+                        <span>登录/注册</span>
+                    </button>
+                    <button class="menu-btn">
+                        <svg width="24" height="24">
+                            <use href="#icon-menu"></use>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 主要内容 -->
+    <main>
+        <!-- 英雄区域 -->
+        <section class="hero">
+            <div class="novel-container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>灯市口小学五年级三班小说天地</h1>
+                        <p>阅读、创作、分享属于我们的故事</p>
+                    </div>
+                    <svg class="hero-icon" width="64" height="64">
+                        <use href="#icon-book"></use>
+                    </svg>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 欢迎卡片 -->
+        <div class="novel-container">
+            <div class="welcome-card">
+                <div class="welcome-header">
+                    <div class="welcome-icon">
+                        <svg width="24" height="24">
+                            <use href="#icon-star"></use>
+                        </svg>
+                    </div>
+                    <div class="welcome-text">
+                        <h2>欢迎来到我们的创作天地！</h2>
+                        <p>这里是灯口小学五年级三班同学们展示创作才华的平台。阅读精彩小说，发表你的作品，与同学们一起分享故事的快乐！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主要内容区域 -->
+        <div class="novel-container">
+            <div class="main-content">
+                <!-- 左侧：热门小说 -->
+                <section class="hot-novels">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <svg class="section-icon" width="24" height="24">
+                                <use href="#icon-trending"></use>
+                            </svg>
+                            热门小说排行榜
+                        </h2>
+                        <span class="section-subtitle">根据阅读量排名</span>
+                    </div>
+                    
+                    <div class="novel-cards">
+                        <!-- 小说卡片1 -->
+                        <div class="novel-card loading">
+                            <div class="novel-image"></div>
+                            <div class="novel-title"></div>
+                            <div class="novel-author"></div>
+                        </div>
+                        
+                        <!-- 小说卡片2 -->
+                        <div class="novel-card loading">
+                            <div class="novel-image"></div>
+                            <div class="novel-title"></div>
+                            <div class="novel-author"></div>
+                        </div>
+                        
+                        <!-- 小说卡片3 -->
+                        <div class="novel-card loading">
+                            <div class="novel-image"></div>
+                            <div class="novel-title"></div>
+                            <div class="novel-author"></div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 右侧：侧边栏 -->
+                <div class="sidebar-cards">
+                    <!-- 排行榜卡片 -->
+                    <div class="sidebar-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <svg width="20" height="20" style="color: #f59e0b;">
+                                    <use href="#icon-trophy"></use>
+                                </svg>
+                                阅读量排行榜
+                            </h3>
+                            <svg width="20" height="20" style="color: #9ca3af;">
+                                <use href="#icon-trending"></use>
+                            </svg>
+                        </div>
+                        <div class="empty-state">
+                            <svg class="empty-icon" width="48" height="48">
+                                <use href="#icon-award"></use>
+                            </svg>
+                            <p class="empty-text">暂无排行榜数据</p>
+                            <p class="empty-subtext">快来阅读小说吧！</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 最新发布卡片 -->
+                    <div class="sidebar-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <svg width="20" height="20" style="color: #8b5cf6;">
+                                    <use href="#icon-sparkles"></use>
+                                </svg>
+                                最新发布
+                            </h3>
+                            <svg width="20" height="20" style="color: #9ca3af;">
+                                <use href="#icon-calendar"></use>
+                            </svg>
+                        </div>
+                        <div class="empty-state">
+                            <svg class="empty-icon" width="48" height="48">
+                                <use href="#icon-book"></use>
+                            </svg>
+                            <p class="empty-text">暂无新发布小说</p>
+                            <p class="empty-subtext">快来发布你的作品吧！</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 快速链接卡片 -->
+                    <div class="sidebar-card">
+                        <h3 class="card-title">快速链接</h3>
+                        <div class="quick-links">
+                            <a href="/novels" class="quick-link">
+                                <div class="link-title">浏览所有小说</div>
+                                <div class="link-desc">探索更多精彩作品</div>
+                            </a>
+                            <a href="/publish" class="quick-link">
+                                <div class="link-title">发布你的作品</div>
+                                <div class="link-desc">开始创作之旅</div>
+                            </a>
+                            <a href="/guide" class="quick-link">
+                                <div class="link-title">创作指南</div>
+                                <div class="link-desc">学习写作技巧</div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- 系统状态卡片 -->
+                    <div class="sidebar-card">
+                        <h3 class="card-title">系统状态</h3>
+                        <div class="status-list">
+                            <div class="status-item">
+                                <span class="status-label">后端API</span>
+                                <span class="status-badge status-online">运行正常</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">数据库</span>
+                                <span class="status-badge status-online">已连接</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">数据更新</span>
+                                <span class="status-loading">加载中...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="novel-container">
+            <div class="footer-content">
+                <!-- 网站信息 -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <svg class="footer-logo-icon" width="24" height="24">
+                            <use href="#icon-book"></use>
+                        </svg>
+                        <span class="footer-logo-text">灯口小学五年级三班小说天地</span>
+                    </div>
+                    <p class="footer-description">
+                        一个属于我们班级的创作平台，记录成长故事，分享阅读快乐。
+                    </p>
+                    <div class="footer-tagline">
+                        <svg width="16" height="16">
+                            <use href="#icon-heart"></use>
+                        </svg>
+                        <span>用心创作，用爱分享</span>
+                    </div>
+                </div>
+                
+                <!-- 快速链接 -->
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul class="footer-links">
+                        <li><a href="/">首页</a></li>
+                        <li><a href="/novels">所有小说</a></li>
+                        <li><a href="/ranking">排行榜</a></li>
+                        <li><a href="/new">最新发布</a></li>
+                        <li><a href="/publish">发布作品</a></li>
+                    </ul>
+                </div>
+                
+                <!-- 关于我们 -->
+                <div class="footer-section">
+                    <h3>关于我们</h3>
+                    <ul class="footer-links">
+                        <li><a href="/about">关于项目</a></li>
+                        <li><a href="/rules">社区规则</a></li>
+                        <li><a href="/help">帮助中心</a></li>
+                        <li><a href="/contact">联系我们</a></li>
+                    </ul>
+                    <div class="footer-tagline" style="margin-top: 24px;">
+                        <svg width="16" height="16">
+                            <use href="#icon-users"></use>
+                        </svg>
+                        <span>仅供班级内部使用</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 版权信息 -->
+            <div class="footer-divider">
+                <p class="footer-copyright">
+                    © 2026 灯口小学五年级三班小说天地 · 所有内容均为同学原创作品
+                </p>
+                <p class="footer-tech">
+                    本网站运行在 Cloudflare 平台上 · 技术支持: OpenClaw AI
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎉 小说网站原版界面已加载');
+            console.log('🔗 后端API: https://novel-platform-api.sunlongyun1030.workers.dev');
+            console.log('💡 邀请码: 2014');
+            
+            // 模拟加载动画
+            setTimeout(() => {
+                const loadingElements = document.querySelectorAll('.loading');
+                loadingElements.forEach(el => {
+                    el.style.animation = 'none';
+                    el.style.opacity = '1';
+                });
+            }, 2000);
+            
+            // 登录按钮点击事件
+            document.querySelector('.login-btn').addEventListener('click', function() {
+                window.location.href = '/login';
+            });
+            
+            // 搜索按钮点击事件
+            document.querySelector('.search-btn').addEventListener('click', function() {
+                alert('搜索功能即将上线！');
+            });
+            
+            // 菜单按钮点击事件（移动端）
+            document.querySelector('.menu-btn').addEventListener('click', function() {
+                const navMenu = document.querySelector('.nav-menu');
+                navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+            });
+            
+            // 响应式菜单
+            function handleResize() {
+                const navMenu = document.querySelector('.nav-menu');
+                if (window.innerWidth > 768) {
+                    navMenu.style.display = 'flex';
+                } else {
+                    navMenu.style.display = 'none';
+                }
+            }
+            
+            window.addEventListener('resize', handleResize);
+            handleResize(); // 初始调用
+        });
+        
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+S 跳转到搜索
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                document.querySelector('.search-btn').click();
+            }
+            
+            // Ctrl+L 跳转到登录
+            if (e.ctrlKey && e.key === 'l') {
+                e.preventDefault();
+                window.location.href = '/login';
+            }
+            
+            // F5 刷新页面
+            if (e.key === 'F5') {
+                e.preventDefault();
+                location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

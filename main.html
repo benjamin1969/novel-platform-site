@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小说天地 - 首页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: #f8fafc;
+            color: #334155;
+        }
+        
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .username {
+            font-weight: 600;
+            color: #4f46e5;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-logout {
+            background: #ef4444;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        
+        .welcome {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .welcome h1 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+        
+        .welcome p {
+            font-size: 18px;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: #4f46e5;
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+        
+        .feature-card p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+        
+        .novels-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .novels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .novel-card {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.2s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .novel-card:hover {
+            transform: translateY(-3px);
+            border-color: #4f46e5;
+        }
+        
+        .novel-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+        
+        .novel-author {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .novel-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            color: #64748b;
+            font-size: 14px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: #ef4444;
+            background: #fee2e2;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .success {
+            text-align: center;
+            padding: 40px;
+            color: #065f46;
+            background: #d1fae5;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .navbar {
+                padding: 15px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .novels-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">📚 小说天地</div>
+        <div class="user-info">
+            <span class="username" id="username">用户</span>
+            <button class="btn btn-logout" onclick="logout()">退出登录</button>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="welcome">
+            <h1>欢迎来到小说创作天地！</h1>
+            <p>这里是灯市口小学五年级三班的专属创作空间，开始你的创作之旅吧！</p>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">📖</div>
+                <h3>阅读小说</h3>
+                <p>浏览同学们创作的精彩小说，发现新的故事世界。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">✍️</div>
+                <h3>创作作品</h3>
+                <p>发挥你的想象力，创作属于自己的小说作品。</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>互动评论</h3>
+                <p>与同学们交流阅读感受，互相鼓励成长。</p>
+            </div>
+        </div>
+        
+        <div class="novels-section">
+            <h2 class="section-title">📈 热门小说</h2>
+            <div id="novelsList" class="novels-grid">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+        
+        <div id="message" class="message"></div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 灯市口小学五年级三班小说天地 | 邀请码注册系统</p>
+        <p>技术支持：Cloudflare Workers + D1数据库</p>
+    </div>
+
+    <script>
+        // API地址
+        const API_URL = 'https://novel-platform-api.sunlongyun1030.workers.dev';
+        
+        // 获取用户信息
+        function getUserInfo() {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    document.getElementById('username').textContent = user.username || '用户';
+                    return user;
+                } catch (e) {
+                    console.error('解析用户信息失败:', e);
+                }
+            }
+            return null;
+        }
+        
+        // 检查登录状态
+        function checkLogin() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                // 未登录，跳转到登录页
+                window.location.href = 'simple-index.html';
+                return false;
+            }
+            return true;
+        }
+        
+        // 加载小说列表
+        async function loadNovels() {
+            const novelsList = document.getElementById('novelsList');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/novels`);
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    novelsList.innerHTML = '';
+                    
+                    if (data.data && data.data.length > 0) {
+                        data.data.forEach(novel => {
+                            const novelCard = document.createElement('div');
+                            novelCard.className = 'novel-card';
+                            novelCard.innerHTML = `
+                                <div class="novel-title">${novel.title || '未命名小说'}</div>
+                                <div class="novel-author">作者：${novel.author_name || '匿名'}</div>
+                                <div class="novel-stats">
+                                    <span>👁️ ${novel.view_count || 0} 阅读</span>
+                                    <span>❤️ ${novel.like_count || 0} 喜欢</span>
+                                </div>
+                            `;
+                            novelsList.appendChild(novelCard);
+                        });
+                    } else {
+                        novelsList.innerHTML = '<div class="loading">暂无小说，快来创作第一篇吧！</div>';
+                    }
+                } else {
+                    novelsList.innerHTML = '<div class="error">加载小说失败</div>';
+                }
+            } catch (error) {
+                console.error('加载小说错误:', error);
+                novelsList.innerHTML = '<div class="error">网络错误，请稍后重试</div>';
+            }
+        }
+        
+        // 显示消息
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = type;
+            messageEl.style.display = 'block';
+            
+            // 3秒后隐藏
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 3000);
+        }
+        
+        // 退出登录
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'simple-index.html';
+            }
+        }
+        
+        // 页面加载时执行
+        window.addEventListener('load', () => {
+            if (checkLogin()) {
+                getUserInfo();
+                loadNovels();
+                
+                // 显示欢迎消息
+                const user = getUserInfo();
+                if (user) {
+                    showMessage(`欢迎回来，${user.username}！`, 'success');
+                }
+            }
+        });
+        
+        // 添加键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+L 退出登录
+            if (e.ctrlKey && e.key === 'l') {
+                e.preventDefault();
+                logout();
+            }
+            
+            // F5 刷新小说列表
+            if (e.key === 'F5') {
+                e.preventDefault();
+                loadNovels();
+                showMessage('小说列表已刷新', 'success');
+            }
+        });
+        
+        console.log('🎉 小说网站首页已加载');
+        console.log('👤 当前用户:', getUserInfo());
+        console.log('🔗 API地址:', API_URL);
+    </script>
+</body>
+</html>
