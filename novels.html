@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小说浏览 - 灯口小学五年级三班小说天地</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: #f8fafc;
+            color: #334155;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background: #f1f5f9;
+            color: #4f46e5;
+        }
+        
+        .nav-link.active {
+            background: #4f46e5;
+            color: white;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-publish {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        /* 页面标题 */
+        .page-header {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .page-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+        
+        .page-header p {
+            font-size: 18px;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* 筛选栏 */
+        .filters {
+            max-width: 1200px;
+            margin: 0 auto 30px;
+            padding: 0 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .filter-label {
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #334155;
+            min-width: 120px;
+        }
+        
+        .search-box {
+            flex: 1;
+            max-width: 400px;
+            padding: 8px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        /* 小说网格 */
+        .novels-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .novel-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .novel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.15);
+        }
+        
+        .novel-cover {
+            height: 180px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+        
+        .novel-info {
+            padding: 20px;
+        }
+        
+        .novel-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .novel-author {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .novel-description {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .novel-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #94a3b8;
+            font-size: 13px;
+            padding-top: 15px;
+            border-top: 1px solid #f1f5f9;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 40px 0;
+            padding: 0 20px;
+        }
+        
+        .page-btn {
+            padding: 8px 16px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .page-btn:hover {
+            background: #f1f5f9;
+        }
+        
+        .page-btn.active {
+            background: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+        
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #64748b;
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #94a3b8;
+            grid-column: 1 / -1;
+        }
+        
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .novels-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">📚 小说天地</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">首页</a>
+            <a href="novels.html" class="nav-link active">浏览小说</a>
+            <a href="publish.html" class="nav-link">发布小说</a>
+            <a href="main.html" class="nav-link">我的主页</a>
+            <a href="login.html" class="btn">登录/注册</a>
+        </div>
+    </nav>
+    
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1>📖 小说浏览</h1>
+        <p>探索同学们创作的精彩故事，发现属于我们的文学世界</p>
+    </div>
+    
+    <!-- 筛选栏 -->
+    <div class="filters">
+        <div class="filter-group">
+            <span class="filter-label">排序:</span>
+            <select class="filter-select" id="sortBy">
+                <option value="latest">最新发布</option>
+                <option value="popular">最受欢迎</option>
+                <option value="views">阅读最多</option>
+                <option value="likes">点赞最多</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <span class="filter-label">分类:</span>
+            <select class="filter-select" id="category">
+                <option value="">全部</option>
+                <option value="adventure">冒险故事</option>
+                <option value="fantasy">奇幻想象</option>
+                <option value="school">校园生活</option>
+                <option value="science">科幻未来</option>
+            </select>
+        </div>
+        
+        <input type="text" class="search-box" id="searchInput" placeholder="搜索小说标题或作者...">
+        
+        <button class="btn btn-publish" onclick="window.location.href='publish.html'">发布新小说</button>
+    </div>
+    
+    <!-- 小说网格 -->
+    <div class="novels-grid" id="novelsGrid">
+        <div class="loading">加载小说中...</div>
+    </div>
+    
+    <!-- 分页 -->
+    <div class="pagination" id="pagination">
+        <!-- 分页按钮将通过JavaScript生成 -->
+    </div>
+    
+    <script>
+        // API配置
+        const API_URL = 'https://novel-platform-api.sunlongyun1030.workers.dev';
+        
+        // 状态管理
+        let currentPage = 1;
+        const pageSize = 12;
+        let totalNovels = 0;
+        let currentSort = 'latest';
+        let currentCategory = '';
+        let currentSearch = '';
+        
+        // 检查登录状态
+        function checkLogin() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                // 更新登录按钮文本
+                const loginBtn = document.querySelector('.btn');
+                if (loginBtn) {
+                    loginBtn.textContent = '登录/注册';
+                    loginBtn.onclick = () => window.location.href = 'login.html';
+                }
+                return false;
+            }
+            return true;
+        }
+        
+        // 获取用户信息
+        function getUserInfo() {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    return JSON.parse(userStr);
+                } catch (e) {
+                    console.error('解析用户信息失败:', e);
+                }
+            }
+            return null;
+        }
+        
+        // 更新导航栏用户状态
+        function updateNavbar() {
+            const user = getUserInfo();
+            const loginBtn = document.querySelector('.btn');
+            
+            if (user && loginBtn) {
+                loginBtn.textContent = `👤 ${user.username}`;
+                loginBtn.onclick = () => window.location.href = 'main.html';
+                
+                // 添加退出选项
+                loginBtn.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    if (confirm('确定要退出登录吗？')) {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        window.location.href = 'index.html';
+                    }
+                });
+            }
+        }
+        
+        // 加载小说列表
+        async function loadNovels() {
+            const novelsGrid = document.getElementById('novelsGrid');
+            novelsGrid.innerHTML = '<div class="loading">加载小说中...</div>';
+            
+            try {
+                // 构建API URL
+                let apiUrl = `${API_URL}/api/novels?page=${currentPage}&limit=${pageSize}`;
+                
+                // 添加排序参数
+                if (currentSort === 'popular') {
+                    apiUrl += '&sort=popular';
+                } else if (currentSort === 'views') {
+                    apiUrl += '&sort=views';
+                } else if (currentSort === 'likes') {
+                    apiUrl += '&sort=likes';
+                }
+                
+                // 添加分类参数
+                if (currentCategory) {
+                    apiUrl += `&category=${currentCategory}`;
+                }
+                
+                // 添加搜索参数
+                if (currentSearch) {
+                    apiUrl += `&search=${encodeURIComponent(currentSearch)}`;
+                }
+                
+                console.log('请求API:', apiUrl);
+                
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    const novels = data.data || [];
+                    totalNovels = data.total || novels.length;
+                    
+                    if (novels.length > 0) {
+                        renderNovels(novels);
+                        renderPagination();
+                    } else {
+                        novelsGrid.innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-icon">📚</div>
+                                <h3>暂无小说</h3>
+                                <p>还没有同学发布小说，快来成为第一个创作者吧！</p>
+                                <button class="btn btn-publish" onclick="window.location.href='publish.html'" style="margin-top: 20px;">
+                                    发布第一篇小说
+                                </button>
+                            </div>
+                        `;
+                    }
+                } else {
+                    novelsGrid.innerHTML = '<div class="error">加载小说失败，请稍后重试</div>';
+                }
+            } catch (error) {
+                console.error('加载小说错误:', error);
+                novelsGrid.innerHTML = '<div class="error">网络错误，请检查连接后重试</div>';
+            }
+        }
+        
+        // 渲染小说卡片
+        function renderNovels(novels) {
+            const novelsGrid = document.getElementById('novelsGrid');
+            novelsGrid.innerHTML = '';
+            
+            novels.forEach(novel => {
+                const novelCard = document.createElement('div');
+                novelCard.className = 'novel-card';
+                novelCard.onclick = () => viewNovelDetail(novel.id);
+                
+                // 生成封面颜色
+                const colors = [
+                    'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                    'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                    'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                    'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
+                ];
+                const colorIndex = novel.id ? novel.id.charCodeAt(0) % colors.length : 0;
+                
+                novelCard.innerHTML = `
+                    <div class="novel-cover" style="background: ${colors[colorIndex]}">
+                        ${novel.title ? novel.title.charAt(0) : '📖'}
+                    </div>
+                    <div class="novel-info">
+                        <h3 class="novel-title">${novel.title || '未命名小说'}</h3>
+                        <div class="novel-author">作者：${novel.author_name || '匿名'}</div>
+                        <p class="novel-description">${novel.description || '这是一个精彩的故事，等待你来阅读...'}</p>
+                        <div class="novel-stats">
+                            <div class="stat-item">👁️ ${novel.view_count || 0}</div>
+                            <div class="stat-item">❤️ ${novel.like_count || 0}</div>
+                            <div class="stat-item">💬 ${novel.comment_count || 0}</div>
+                            <div class="stat-item">📅 ${formatDate(novel.created_at)}</div>
+                        </div>
+                    </div>
+                `;
+                
+                novelsGrid.appendChild(novelCard);
+            });
+        }
+        
+        // 渲染分页
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            const totalPages = Math.ceil(totalNovels / pageSize);
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            
+            // 上一页按钮
+            html += `<button class="page-btn" ${currentPage <= 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">上一页</button>`;
+            
+            // 页码按钮
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            
+            // 下一页按钮
+            html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">下一页</button>`;
+            
+            pagination.innerHTML = html;
+        }
+        
+        // 切换页码
+        function changePage(page) {
+            if (page < 1 || page > Math.ceil(totalNovels / pageSize)) return;
+            currentPage = page;
+            loadNovels();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // 查看小说详情
+        function viewNovelDetail(novelId) {
+            window.location.href = `novel-detail.html?id=${novelId}`;
+        }
+        
+        // 格式化日期
+        function formatDate(timestamp) {
+            if (!timestamp) return '刚刚';
+            
+            const date = new Date(timestamp * 1000);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 60) {
+                return `${diffMins}分钟前`;
+            } else if (diffHours < 24) {
+                return `${diffHours}小时前`;
+            } else if (diffDays < 30) {
+                return `${diffDays}天前`;
+            } else {
+                return date.toLocaleDateString('zh-CN');
+            }
+        }
+        
+        // 初始化事件监听
+        function initEventListeners() {
+            // 排序选择
+            document.getElementById('sortBy').addEventListener('change', (e) => {
+                currentSort = e.target.value;
+                currentPage = 1;
+                loadNovels();
+            });
+            
+            // 分类选择
+            document.getElementById('category').addEventListener('change', (e) => {
+                currentCategory = e.target.value;
+                currentPage = 1;
+                loadNovels();
+            });
+            
+            // 搜索输入
+            const searchInput = document.getElementById('searchInput');
+            let searchTimeout;
+            
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    currentSearch = e.target.value.trim();
+                    currentPage = 1;
+                    loadNovels();
+                }, 500);
+            });
+            
+            // 回车搜索
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    currentSearch = e.target.value.trim();
+                    currentPage = 1;
+                    loadNovels();
+                }
+            });
+        }
+        
+        // 页面加载时执行
+        window.addEventListener('load', () => {
+            checkLogin();
+            updateNavbar();
+            initEventListeners();
+            loadNovels();
+            
+            // 显示欢迎消息
+            const user = getUserInfo();
+            if (user) {
+                console.log(`👤 欢迎，${user.username}！`);
+            }
+            
+            console.log('🎉 小说浏览页面已加载');
+            console.log('🔗 API地址:', API_URL);
+        });
+        
+        // 添加键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+F 聚焦搜索框
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+            
+            // F5 刷新小说列表
+            if (e.key === 'F5') {
+                e.preventDefault();
+                loadNovels();
+            }
+        });
+    </script>
+</body>
+</html>

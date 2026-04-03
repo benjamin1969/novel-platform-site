@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发布小说 - 灯口小学五年级三班小说天地</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: #f8fafc;
+            color: #334155;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background: #f1f5f9;
+            color: #4f46e5;
+        }
+        
+        .nav-link.active {
+            background: #4f46e5;
+            color: white;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .btn-secondary {
+            background: #64748b;
+        }
+        
+        /* 页面标题 */
+        .page-header {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .page-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+        
+        .page-header p {
+            font-size: 18px;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* 发布表单 */
+        .publish-container {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .form-label .required {
+            color: #ef4444;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            color: #334155;
+        }
+        
+        .form-hint {
+            margin-top: 6px;
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .form-error {
+            margin-top: 6px;
+            font-size: 14px;
+            color: #ef4444;
+            display: none;
+        }
+        
+        /* 章节管理 */
+        .chapters-section {
+            margin-top: 40px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 30px;
+        }
+        
+        .chapters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .chapters-list {
+            margin-bottom: 20px;
+        }
+        
+        .chapter-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chapter-info {
+            flex: 1;
+        }
+        
+        .chapter-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .chapter-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chapter-btn {
+            padding: 6px 12px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .chapter-btn:hover {
+            background: #f1f5f9;
+        }
+        
+        /* 章节编辑模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        /* 表单操作 */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        /* 消息提示 */
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .message.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+        
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .form-card {
+                padding: 20px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .form-actions .btn {
+                width: 100%;
+            }
+            
+            .page-header h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">📚 小说天地</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">首页</a>
+            <a href="novels.html" class="nav-link">浏览小说</a>
+            <a href="publish.html" class="nav-link active">发布小说</a>
+            <a href="main.html" class="nav-link">我的主页</a>
+            <span id="userGreeting"></span>
+        </div>
+    </nav>
+    
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1>✍️ 发布小说</h1>
+        <p>分享你的创作才华，让同学们阅读你的精彩故事</p>
+    </div>
+    
+    <!-- 消息提示 -->
+    <div class="publish-container">
+        <div class="message" id="message"></div>
+        
+        <!-- 发布表单 -->
+        <div class="form-card">
+            <form id="publishForm">
+                <!-- 小说基本信息 -->
+                <div class="form-group">
+                    <label class="form-label">
+                        小说标题 <span class="required">*</span>
+                    </label>
+                    <input type="text" class="form-input" id="title" 
+                           placeholder="请输入小说标题（2-50个字）" 
+                           maxlength="50" required>
+                    <div class="form-error" id="titleError"></div>
+                    <div class="form-hint">一个好的标题能吸引更多读者</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        小说简介 <span class="required">*</span>
+                    </label>
+                    <textarea class="form-input form-textarea" id="description" 
+                              placeholder="请简要介绍你的小说内容（50-500个字）" 
+                              maxlength="500" required></textarea>
+                    <div class="form-error" id="descriptionError"></div>
+                    <div class="form-hint">简要介绍故事背景、主要角色和情节</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">分类</label>
+                    <select class="form-select" id="category">
+                        <option value="">选择分类（可选）</option>
+                        <option value="adventure">冒险故事</option>
+                        <option value="fantasy">奇幻想象</option>
+                        <option value="school">校园生活</option>
+                        <option value="science">科幻未来</option>
+                        <option value="mystery">神秘悬疑</option>
+                        <option value="friendship">友情故事</option>
+                        <option value="growth">成长经历</option>
+                    </select>
+                    <div class="form-hint">选择合适的分类有助于读者找到你的作品</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">标签</label>
+                    <input type="text" class="form-input" id="tags" 
+                           placeholder="输入标签，用逗号分隔（如：校园,友情,成长）">
+                    <div class="form-hint">最多5个标签，每个标签不超过10个字</div>
+                </div>
+                
+                <!-- 章节管理 -->
+                <div class="chapters-section">
+                    <div class="chapters-header">
+                        <h3>章节管理</h3>
+                        <button type="button" class="btn" onclick="openChapterModal()">
+                            + 添加章节
+                        </button>
+                    </div>
+                    
+                    <div class="chapters-list" id="chaptersList">
+                        <div class="loading" id="chaptersLoading">暂无章节，点击"添加章节"开始创作</div>
+                    </div>
+                </div>
+                
+                <!-- 发布设置 -->
+                <div class="form-group">
+                    <label class="form-label">发布设置</label>
+                    <div style="display: flex; gap: 20px; margin-top: 10px;">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="radio" name="status" value="published" checked>
+                            <span>立即发布</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <input type="radio" name="status" value="draft">
+                            <span>保存为草稿</span>
+                        </label>
+                    </div>
+                    <div class="form-hint">草稿只有你自己能看到，可以稍后发布</div>
+                </div>
+                
+                <!-- 表单操作 -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="saveAsDraft()">
+                        保存草稿
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        发布小说
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 章节编辑模态框 -->
+    <div class="modal" id="chapterModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">添加章节</h3>
+                <button type="button" onclick="closeChapterModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">
+                        章节标题 <span class="required">*</span>
+                    </label>
+                    <input type="text" class="form-input" id="chapterTitle" 
+                           placeholder="例如：第一章 新的开始" required>
+                    <div class="form-error" id="chapterTitleError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        章节内容 <span class="required">*</span>
+                    </label>
+                    <textarea class="form-input form-textarea" id="chapterContent" 
+                              placeholder="开始你的创作吧！建议每章1000-5000字" 
+                              rows="10" required></textarea>
+                    <div class="form-error" id="chapterContentError"></div>
+                    <div class="form-hint">
+                        字数统计：<span id="wordCount">0</span> 字
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeChapterModal()">
+                    取消
+                </button>
+                <button type="button" class="btn btn-primary" onclick="saveChapter()">
+                    保存章节
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // API配置
+        const API_URL = 'https://novel-platform-api.sunlongyun1030.workers.dev';
+        
+        // 状态管理
+        let chapters = [];
+        let editingChapterIndex = -1;
+        let currentNovelId = null;
+        
+        // 检查登录状态
+        function checkLogin() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showMessage('请先登录才能发布小说', 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                return false;
+            }
+            return true;
+        }
+        
+        // 获取用户信息
+        function getUserInfo() {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    return JSON.parse(userStr);
+                } catch (e) {
+                    console.error('解析用户信息失败:', e);
+                }
+            }
+            return null;
+        }
+        
+        // 更新导航栏
+        function updateNavbar() {
+            const user = getUserInfo();
+            const userGreeting = document.getElementById('userGreeting');
+            
+            if (user) {
+                userGreeting.innerHTML = `
+                    <span style="color: #4f46e5; font-weight: 600;">👤 ${user.username}</span>
+                    <button class="btn" onclick="logout()" style="margin-left: 10px; background: #ef4444;">
+                        退出
+                    </button>
+                `;
+            } else {
+                userGreeting.innerHTML = `
+                    <a href="login.html" class="btn">登录/注册</a>
+                `;
+            }
+        }
+        
+        // 退出登录
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // 显示消息
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            
+            // 自动隐藏
+            if (type !== 'error') {
+                setTimeout(() => {
+                    messageEl.style.display = 'none';
+                }, 5000);
+            }
+        }
+        
+        // 打开章节编辑模态框
+        function openChapterModal(index = -1) {
+            editingChapterIndex = index;
+            const modal = document.getElementById('chapterModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const chapterTitle = document.getElementById('chapterTitle');
+            const chapterContent = document.getElementById('chapterContent');
+            
+            if (index >= 0 && chapters[index]) {
+                // 编辑现有章节
+                modalTitle.textContent = '编辑章节';
+                chapterTitle.value = chapters[index].title;
+                chapterContent.value = chapters[index].content;
+            } else {
+                // 添加新章节
+                modalTitle.textContent = '添加章节';
+                chapterTitle.value = '';
+                chapterContent.value = '';
+            }
+            
+            // 更新字数统计
+            updateWordCount();
+            
+            // 清除错误信息
+            document.getElementById('chapterTitleError').style.display = 'none';
+            document.getElementById('chapterContentError').style.display = 'none';
+            
+            modal.style.display = 'flex';
+            chapterTitle.focus();
+        }
+        
+        // 关闭章节编辑模态框
+        function closeChapterModal() {
+            document.getElementById('chapterModal').style.display = 'none';
+        }
+        
+        // 更新字数统计
+        function updateWordCount() {
+            const content = document.getElementById('chapterContent').value;
+            const wordCount = content.replace(/\s/g, '').length;
+            document.getElementById('wordCount').textContent = wordCount;
+        }
+        
+        // 保存章节
+        function saveChapter() {
+            const title = document.getElementById('chapterTitle').value.trim();
+            const content = document.getElementById('chapterContent').value.trim();
+            const titleError = document.getElementById('chapterTitleError');
+            const contentError = document.getElementById('chapterContentError');
+            
+            // 验证输入
+            let isValid = true;
+            
+            if (!title) {
+                titleError.textContent = '请输入章节标题';
+                titleError.style.display = 'block';
+                isValid = false;
+            } else if (title.length < 2 || title.length > 50) {
+                titleError.textContent = '章节标题应为2-50个字';
+                titleError.style.display = 'block';
+                isValid = false;
+            } else {
+                titleError.style.display = 'none';
+            }
+            
+            if (!content) {
+                contentError.textContent = '请输入章节内容';
+                contentError.style.display = 'block';
+                isValid = false;
+            } else if (content.length < 100) {
+                contentError.textContent = '章节内容至少100字';
+                contentError.style.display = 'block';
+                isValid = false;
+            } else {
+                contentError.style.display = 'none';
+            }
+            
+            if (!isValid) return;
+            
+            // 保存章节
+            const chapter = {
+                title: title,
+                content: content,
+                order: editingChapterIndex >= 0 ? chapters[editingChapterIndex].order : chapters.length + 1
+            };
+            
+            if (editingChapterIndex >= 0) {
+                // 更新现有章节
+                chapters[editingChapterIndex] = chapter;
+            } else {
+                // 添加新章节
+                chapters.push(chapter);
+            }
+            
+            // 重新渲染章节列表
+            renderChapters();
+            
+            // 关闭模态框
+            closeChapterModal();
+            
+            showMessage('章节保存成功', 'success');
+        }
+        
+        // 渲染章节列表
+        function renderChapters() {
+            const chaptersList = document.getElementById('chaptersList');
+            
+            if (chapters.length === 0) {
+                chaptersList.innerHTML = '<div class="loading">暂无章节，点击"添加章节"开始创作</div>';
+                return;
+            }
+            
+            let html = '';
+            chapters.forEach((chapter, index) => {
+                const wordCount = chapter.content.replace(/\s/g, '').length;
+                html += `
+                    <div class="chapter-item">
+                        <div class="chapter-info">
+                            <div class="chapter-title">第${index + 1}章 ${chapter.title}</div>
+                            <div style="color: #64748b; font-size: 14px;">
+                                ${wordCount}字 · ${chapter.content.substring(0, 50)}...
+                            </div>
+                        </div>
+                        <div class="chapter-actions">
+                            <button class="chapter-btn" onclick="editChapter(${index})">编辑</button>
+                            <button class="chapter-btn" onclick="deleteChapter(${index})">删除</button>
+                            <button class="chapter-btn" onclick="moveChapter(${index}, 'up')" ${index === 0 ? 'disabled' : ''}>上移</button>
+                            <button class="chapter-btn" onclick="moveChapter(${index}, 'down')" ${index === chapters.length - 1 ? 'disabled' : ''}>下移</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            chaptersList.innerHTML = html;
+        }
+        
+        // 编辑章节
+        function editChapter(index) {
+            openChapterModal(index);
+        }
+        
+        // 删除章节
+        function deleteChapter(index) {
+            if (confirm('确定要删除这个章节吗？')) {
+                chapters.splice(index, 1);
+                renderChapters();
+                showMessage('章节已删除', 'success');
+            }
+        }
+        
+        // 移动章节
+        function moveChapter(index, direction) {
+            if (direction === 'up' && index > 0) {
+                [chapters[index], chapters[index - 1]] = [chapters[index - 1], chapters[index]];
+            } else if (direction === 'down' && index < chapters.length - 1) {
+                [chapters[index], chapters[index + 1]] = [chapters[index + 1], chapters[index]];
+            }
+            renderChapters();
+        }
+        
+        // 验证表单
+        function validateForm() {
+            const title = document.getElementById('title').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const titleError = document.getElementById('titleError');
+            const descriptionError = document.getElementById('descriptionError');
+            
+            let isValid = true;
+            
+            // 验证标题
+            if (!title) {
+                titleError.textContent = '请输入小说标题';
+                titleError.style.display = 'block';
+                isValid = false;
+            } else if (title.length < 2 || title.length > 50) {
+                titleError.textContent = '标题应为2-50个字';
+                titleError.style.display = 'block';
+                isValid = false;
+            } else {
+                titleError.style.display = 'none';
+            }
+            
+            // 验证简介
+            if (!description) {
+                descriptionError.textContent = '请输入小说简介';
+                descriptionError.style.display = 'block';
+                isValid = false;
+            } else if (description.length < 50 || description.length > 500) {
+                descriptionError.textContent = '简介应为50-500个字';
+                descriptionError.style.display = 'block';
+                isValid = false;
+            } else {
+                descriptionError.style.display = 'none';
+            }
+            
+            // 验证章节
+            if (chapters.length === 0) {
+                showMessage('请至少添加一个章节', 'error');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // 保存为草稿
+        async function saveAsDraft() {
+            if (!validateForm()) return;
+            
+            try {
+                const novelData = prepareNovelData('draft');
+                const response = await publishNovel(novelData);
+                
+                if (response.success) {
+                    showMessage('草稿保存成功！', 'success');
+                    currentNovelId = response.data.id;
+                    
+                    // 3秒后跳转到我的主页
+                    setTimeout(() => {
+                        window.location.href = 'main.html';
+                    }, 3000);
+                } else {
+                    showMessage(`保存失败: ${response.message}`, 'error');
+                }
+            } catch (error) {
+                console.error('保存草稿失败:', error);
+                showMessage('网络错误，请稍后重试', 'error');
+            }
+        }
+        
+        // 发布小说
+        async function publishNovelDirectly() {
+            if (!validateForm()) return;
+            
+            try {
+                const novelData = prepareNovelData('published');
+                const response = await publishNovel(novelData);
+                
+                if (response.success) {
+                    showMessage('小说发布成功！', 'success');
+                    currentNovelId = response.data.id;
+                    
+                    // 3秒后跳转到小说详情页
+                    setTimeout(() => {
+                        window.location.href = `novel-detail.html?id=${currentNovelId}`;
+                    }, 3000);
+                } else {
+                    showMessage(`发布失败: ${response.message}`, 'error');
+                }
+            } catch (error) {
+                console.error('发布失败:', error);
+                showMessage('网络错误，请稍后重试', 'error');
+            }
+        }
+        
+        // 准备小说数据
+        function prepareNovelData(status) {
+            const user = getUserInfo();
+            if (!user) {
+                throw new Error('用户未登录');
+            }
+            
+            const tags = document.getElementById('tags').value
+                .split(',')
+                .map(tag => tag.trim())
+                .filter(tag => tag.length > 0)
+                .slice(0, 5);
+            
+            return {
+                title: document.getElementById('title').value.trim(),
+                description: document.getElementById('description').value.trim(),
+                category: document.getElementById('category').value || null,
+                tags: tags,
+                status: status,
+                author_id: user.id,
+                chapters: chapters.map((chapter, index) => ({
+                    title: chapter.title,
+                    content: chapter.content,
+                    order: index + 1
+                }))
+            };
+        }
+        
+        // 调用API发布小说
+        async function publishNovel(novelData) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('用户未登录');
+            }
+            
+            const response = await fetch(`${API_URL}/api/novels`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(novelData)
+            });
+            
+            return await response.json();
+        }
+        
+        // 初始化事件监听
+        function initEventListeners() {
+            // 表单提交
+            document.getElementById('publishForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                publishNovelDirectly();
+            });
+            
+            // 章节内容字数统计
+            document.getElementById('chapterContent').addEventListener('input', updateWordCount);
+            
+            // 监听章节模态框外的点击
+            document.getElementById('chapterModal').addEventListener('click', (e) => {
+                if (e.target.id === 'chapterModal') {
+                    closeChapterModal();
+                }
+            });
+            
+            // 键盘快捷键
+            document.addEventListener('keydown', (e) => {
+                // Ctrl+S 保存草稿
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    saveAsDraft();
+                }
+                
+                // Ctrl+Enter 发布
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    publishNovelDirectly();
+                }
+                
+                // Esc 关闭模态框
+                if (e.key === 'Escape') {
+                    closeChapterModal();
+                }
+            });
+        }
+        
+        // 页面加载时执行
+        window.addEventListener('load', () => {
+            if (!checkLogin()) return;
+            
+            updateNavbar();
+            initEventListeners();
+            
+            // 检查是否有待编辑的小说（从URL参数）
+            const urlParams = new URLSearchParams(window.location.search);
+            const editNovelId = urlParams.get('edit');
+            
+            if (editNovelId) {
+                // 加载现有小说进行编辑
+                loadNovelForEdit(editNovelId);
+            }
+            
+            console.log('🎉 小说发布页面已加载');
+            console.log('👤 当前用户:', getUserInfo());
+            console.log('🔗 API地址:', API_URL);
+        });
+        
+        // 加载现有小说进行编辑（未来功能）
+        async function loadNovelForEdit(novelId) {
+            // 这里可以添加加载现有小说进行编辑的功能
+            console.log('加载小说进行编辑:', novelId);
+        }
