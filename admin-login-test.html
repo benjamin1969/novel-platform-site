@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员登录测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .password-input-wrapper {
+            position: relative;
+        }
+        
+        .password-input-wrapper input {
+            padding-right: 50px;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.3s;
+        }
+        
+        .password-toggle:hover {
+            color: #4f46e5;
+            background: #f3f4f6;
+        }
+        
+        .password-toggle svg {
+            display: block;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .message.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+        
+        .test-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .test-info h3 {
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+        
+        .test-info ul {
+            padding-left: 20px;
+            color: #64748b;
+        }
+        
+        .test-info li {
+            margin-bottom: 8px;
+        }
+        
+        .api-response {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .debug-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            color: #92400e;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 管理员登录测试</h1>
+            <p>专为解决管理员登录问题</p>
+        </div>
+        
+        <div class="content">
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminUsername">用户名/邮箱</label>
+                    <input type="text" id="adminUsername" placeholder="请输入用户名或邮箱" value="admin" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="adminPassword">密码</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="adminPassword" placeholder="请输入密码" value="Admin123!@#" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('adminPassword')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn" id="loginBtn">登录管理员账户</button>
+            </form>
+            
+            <div id="message" class="message"></div>
+            
+            <div id="apiResponse" class="api-response" style="display: none;"></div>
+            
+            <div class="debug-info">
+                <strong>调试信息：</strong><br>
+                • API地址: <span id="apiUrl"></span><br>
+                • 测试时间: <span id="testTime"></span><br>
+                • 数据库状态: <span id="dbStatus">未知</span>
+            </div>
+            
+            <div class="test-info">
+                <h3>📋 测试说明</h3>
+                <ul>
+                    <li>用户名: <code>admin</code> 或邮箱: <code>admin@dskxx.cc</code></li>
+                    <li>密码: <code>Admin123!@#</code> (首次登录后请修改)</li>
+                    <li>点击眼睛图标可以显示/隐藏密码</li>
+                    <li>登录成功后会显示完整的API响应</li>
+                    <li>如果失败，会显示详细的错误信息</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API地址
+        const API_URL = 'https://novel-platform-api.sunlongyun1030.workers.dev';
+        
+        // 更新调试信息
+        document.getElementById('apiUrl').textContent = API_URL;
+        document.getElementById('testTime').textContent = new Date().toLocaleString('zh-CN');
+        
+        // 切换密码显示/隐藏
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.parentElement.querySelector('.password-toggle');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                `;
+            } else {
+                input.type = 'password';
+                button.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                `;
+            }
+        }
+        
+        // 显示消息
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+        }
+        
+        // 显示API响应
+        function showApiResponse(data) {
+            const responseEl = document.getElementById('apiResponse');
+            responseEl.textContent = JSON.stringify(data, null, 2);
+            responseEl.style.display = 'block';
+        }
+        
+        // 更新数据库状态
+        function updateDbStatus(status, message) {
+            const statusEl = document.getElementById('dbStatus');
+            statusEl.textContent = status;
+            statusEl.style.color = status === '正常' ? '#10b981' : 
+                                  status === '异常' ? '#ef4444' : '#6b7280';
+            
+            if (message) {
+                showMessage(message, status === '正常' ? 'success' : 'error');
+            }
+        }
+        
+        // 检查API健康状态
+        async function checkApiHealth() {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                if (response.ok) {
+                    updateDbStatus('正常', '✅ API服务正常');
+                    return true;
+                } else {
+                    updateDbStatus('异常', '❌ API服务异常');
+                    return false;
+                }
+            } catch (error) {
+                updateDbStatus('异常', `❌ API连接失败: ${error.message}`);
+                return false;
+            }
+        }
+        
+        // 管理员登录
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('adminUsername').value.trim();
+            const password = document.getElementById('adminPassword').value.trim();
+            const loginBtn = document.getElementById('loginBtn');
+            
+            if (!username || !password) {
+                showMessage('请输入用户名和密码', 'error');
+                return;
+            }
+            
+            // 禁用登录按钮
+            loginBtn.disabled = true;
+            loginBtn.textContent = '登录中...';
+            
+            showMessage('正在登录管理员账户...', 'info');
+            
+            try {
+                // 尝试两种可能的邮箱格式
+                const emailAttempts = [
+                    `${username}@dskxx.local`,  // 前端转换格式
+                    `${username}@dskxx.cc`,     // 实际数据库格式
+                    username                    // 直接使用用户名
+                ];
+                
+                let loginSuccess = false;
+                let responseData = null;
+                
+                // 尝试每种邮箱格式
+                for (const email of emailAttempts) {
+                    console.log(`尝试登录: ${email}`);
+                    
+                    const response = await fetch(`${API_URL}/api/users/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        loginSuccess = true;
+                        responseData = data;
+                        console.log(`✅ 登录成功，使用邮箱格式: ${email}`);
+                        break;
+                    }
+                    
+                    // 显示尝试结果
+                    console.log(`❌ 尝试失败 (${email}):`, data.error || '未知错误');
+                }
+                
+                if (loginSuccess) {
+                    showMessage('🎉 管理员登录成功！', 'success');
+                    showApiResponse(responseData);
+                    
+                    // 保存token和用户信息
+                    localStorage.setItem('token', responseData.data.token);
+                    localStorage.setItem('user', JSON.stringify(responseData.data.user));
+                    
+                    // 检查是否为管理员
+                    if (responseData.data.user.role === 'admin') {
+                        showMessage('✅ 验证通过：用户具有管理员权限', 'success');
+                        
+                        // 3秒后跳转到管理员后台
+                        setTimeout(() => {
+                            window.location.href = 'admin.html';
+                        }, 3000);
+                    } else {
+                        showMessage('⚠️ 登录成功，但用户不是管理员', 'error');
+                    }
+                } else {
+                    showMessage('❌ 管理员登录失败', 'error');
+                    showApiResponse({ 
+                        error: '所有登录尝试都失败',
+                        attempts: emailAttempts,
+                        suggestion: '请确认：1. 数据库已扩展 2. 管理员账户存在 3. 密码正确'
+                    });
+                }
+                
+            } catch (error) {
+                showMessage(`❌ 网络错误: ${error.message}`, 'error');
+                console.error('登录错误:', error);
+            } finally {
+                // 恢复登录按钮
+                loginBtn.disabled = false;
+                loginBtn.textContent = '登录管理员账户';
+            }
+        });
+        
+        // 页面加载时检查API状态
+        window.addEventListener('load', () => {
+            checkApiHealth();
+            
+            // 检查是否已登录
+            const token = localStorage.getItem('token');
+            const userStr = localStorage.getItem('user');
+            
+            if (token && userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    if (user.role === 'admin') {
+                        showMessage(`✅ 检测到已登录的管理员: ${user.username}`, 'success');
+                        document.getElementById('adminUsername').value = user.username;
+                    }
+                } catch (e) {
+                    // 忽略解析错误
+                }
+            }
+            
+            console.log('🔐 管理员登录测试页面已加载');
+            console.log(`🔗 API地址: ${API_URL}`);
+            console.log(`👤 测试账户: admin / Admin123!@#`);
+        });
+        
+        // 添加键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            // Enter键提交表单
+            if (e.key === 'Enter') {
+                const loginBtn = document.getElementById('loginBtn');
+                if (!loginBtn.disabled) {
+                    loginBtn.click();
+                }
+            }
+            
+            // Ctrl+Shift+P 显示/隐藏密码
+            if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+                e.preventDefault();
+                togglePasswordVisibility('adminPassword');
+            }
+        });
+    </script>
+</body>
+</html>

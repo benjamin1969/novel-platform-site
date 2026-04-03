@@ -100,6 +100,38 @@
             transition: border-color 0.3s;
         }
         
+        .password-input-wrapper {
+            position: relative;
+        }
+        
+        .password-input-wrapper input {
+            padding-right: 50px;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.3s;
+        }
+        
+        .password-toggle:hover {
+            color: #4f46e5;
+            background: #f3f4f6;
+        }
+        
+        .password-toggle svg {
+            display: block;
+        }
+        }
+        
         input:focus {
             outline: none;
             border-color: #4f46e5;
@@ -207,7 +239,15 @@
                 
                 <div class="form-group">
                     <label for="loginPassword">密码</label>
-                    <input type="password" id="loginPassword" placeholder="请输入密码" required>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="loginPassword" placeholder="请输入密码" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('loginPassword')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 
                 <button type="submit" class="btn">登录</button>
@@ -226,7 +266,15 @@
                 
                 <div class="form-group">
                     <label for="registerPassword">密码</label>
-                    <input type="password" id="registerPassword" placeholder="请输入密码（至少6位）" required>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="registerPassword" placeholder="请输入密码（至少6位）" required>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('registerPassword')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -255,6 +303,30 @@
     <script>
         // API地址
         const API_URL = 'https://novel-platform-api.sunlongyun1030.workers.dev';
+        
+        // 切换密码显示/隐藏
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.parentElement.querySelector('.password-toggle');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                `;
+            } else {
+                input.type = 'password';
+                button.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                `;
+            }
+        }
         
         // 显示标签页
         function showTab(tabName) {
