@@ -314,7 +314,7 @@
             const token = localStorage.getItem('token');
             if (!token) {
                 // 未登录，跳转到登录页
-                window.location.href = 'simple-index.html';
+                window.location.href = 'login.html';
                 return false;
             }
             return true;
@@ -375,7 +375,8 @@
             if (confirm('确定要退出登录吗？')) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
-                window.location.href = 'simple-index.html';
+                // 跳转到登录页面
+                window.location.href = 'login.html';
             }
         }
         
