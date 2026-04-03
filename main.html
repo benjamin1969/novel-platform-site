@@ -313,7 +313,7 @@
         function checkLogin() {
             const token = localStorage.getItem('token');
             if (!token) {
-                // 未登录，跳转到登录页
+                // 未登录，跳转到登录页（需要登录才能访问用户首页）
                 window.location.href = 'login.html';
                 return false;
             }
@@ -375,8 +375,8 @@
             if (confirm('确定要退出登录吗？')) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
-                // 跳转到登录页面
-                window.location.href = 'login.html';
+                // 跳转到主页面（用户要求）
+                window.location.href = 'index.html';
             }
         }
         
