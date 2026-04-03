@@ -347,7 +347,7 @@
         
         <input type="text" class="search-box" id="searchInput" placeholder="搜索小说标题或作者...">
         
-        <button class="btn btn-publish" onclick="window.location.href='publish.html'">发布新小说</button>
+        <button class="btn btn-publish" onclick="checkPublishPermission()">发布新小说</button>
     </div>
     
     <!-- 小说网格 -->
@@ -372,16 +372,10 @@
         let currentCategory = '';
         let currentSearch = '';
         
-        // 检查登录状态
+        // 检查登录状态（仅用于需要登录的操作）
         function checkLogin() {
             const token = localStorage.getItem('token');
             if (!token) {
-                // 更新登录按钮文本
-                const loginBtn = document.querySelector('.btn');
-                if (loginBtn) {
-                    loginBtn.textContent = '登录/注册';
-                    loginBtn.onclick = () => window.location.href = 'login.html';
-                }
                 return false;
             }
             return true;
@@ -405,11 +399,14 @@
             const user = getUserInfo();
             const loginBtn = document.querySelector('.btn');
             
-            if (user && loginBtn) {
+            if (!loginBtn) return;
+            
+            if (user) {
+                // 已登录用户
                 loginBtn.textContent = `👤 ${user.username}`;
                 loginBtn.onclick = () => window.location.href = 'main.html';
                 
-                // 添加退出选项
+                // 添加退出选项（右键点击退出）
                 loginBtn.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
                     if (confirm('确定要退出登录吗？')) {
@@ -418,6 +415,11 @@
                         window.location.href = 'index.html';
                     }
                 });
+            } else {
+                // 游客
+                loginBtn.textContent = '登录/注册';
+                loginBtn.onclick = () => window.location.href = 'login.html';
+                loginBtn.oncontextmenu = null; // 移除右键功能
             }
         }
         
@@ -565,6 +567,19 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
+        // 检查发布权限
+        function checkPublishPermission() {
+            if (checkLogin()) {
+                // 已登录，跳转到发布页面
+                window.location.href = 'publish.html';
+            } else {
+                // 未登录，提示登录
+                if (confirm('发布小说需要登录，是否前往登录页面？')) {
+                    window.location.href = 'login.html';
+                }
+            }
+        }
+        
         // 查看小说详情
         function viewNovelDetail(novelId) {
             window.location.href = `novel-detail.html?id=${novelId}`;
@@ -633,18 +648,19 @@
         
         // 页面加载时执行
         window.addEventListener('load', () => {
-            checkLogin();
-            updateNavbar();
+            updateNavbar(); // 更新导航栏状态
             initEventListeners();
-            loadNovels();
+            loadNovels(); // 加载小说列表（游客也可访问）
             
-            // 显示欢迎消息
+            // 显示欢迎消息（如果有用户）
             const user = getUserInfo();
             if (user) {
                 console.log(`👤 欢迎，${user.username}！`);
+            } else {
+                console.log('👋 欢迎游客浏览小说！');
             }
             
-            console.log('🎉 小说浏览页面已加载');
+            console.log('🎉 小说浏览页面已加载（游客可访问）');
             console.log('🔗 API地址:', API_URL);
         });
         

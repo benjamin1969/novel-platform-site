@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小说详情 - 灯口小学五年级三班小说天地</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: #f8fafc;
+            color: #334155;
+        }
+        
+        /* 导航栏 */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background: #f1f5f9;
+            color: #4f46e5;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #64748b;
+        }
+        
+        /* 面包屑导航 */
+        .breadcrumb {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .breadcrumb a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+        
+        /* 小说详情容器 */
+        .novel-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+        
+        /* 小说头部 */
+        .novel-header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 30px;
+        }
+        
+        .novel-cover {
+            width: 200px;
+            height: 280px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 72px;
+            flex-shrink: 0;
+        }
+        
+        .novel-info {
+            flex: 1;
+        }
+        
+        .novel-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+        
+        .novel-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .novel-description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #475569;
+            margin-bottom: 25px;
+        }
+        
+        .novel-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #4f46e5;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        /* 章节列表 */
+        .chapters-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chapters-list {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .chapter-item {
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        
+        .chapter-item:hover {
+            background: #f8fafc;
+            border-color: #c7d2fe;
+        }
+        
+        .chapter-info {
+            flex: 1;
+        }
+        
+        .chapter-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+        
+        .chapter-meta {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        /* 评论区域 */
+        .comments-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .comment-form {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .comment-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .comment-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .comment-submit {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .comments-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .comment-item {
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .comment-time {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .comment-content {
+            line-height: 1.6;
+            color: #475569;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .novel-header {
+                flex-direction: column;
+                padding: 20px;
+            }
+            
+            .novel-cover {
+                width: 100%;
+                height: 200px;
+                margin-bottom: 20px;
+            }
+            
+            .novel-title {
+                font-size: 24px;
+            }
+            
+            .novel-stats {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">📚 小说天地</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">首页</a>
+            <a href="novels.html" class="nav-link">浏览小说</a>
+            <a href="javascript:void(0)" onclick="checkPublishPermission()" class="nav-link">发布小说</a>
+            <a href="main.html" class="nav-link">我的主页</a>
+            <span id="userGreeting"></span>
+        </div>
+    </nav>
+    
+    <!-- 面包屑导航 -->
+    <div class="breadcrumb">
+        <a href="index.html">首页</a> &gt; 
+        <a href="novels.html">小说浏览</a> &gt; 
+        <span id="novelTitleBreadcrumb">小说详情</span>
+    </div>
+    
+    <!-- 小说详情容器 -->
+    <div class="novel-detail-container">
+        <!-- 小说头部 -->
+        <div class="novel-header">
+            <div class="novel-cover" id="novelCover">
+                📖
+            </div>
+            <div class="novel-info">
+                <h1 class="novel-title" id="novelTitle">加载中...</h1>
+                <div class="novel-meta">
+                    <span id="novelAuthor">作者：加载中...</span>
+                    <span id="novelCategory">分类：加载中...</span>
+                    <span id="novelStatus">状态：加载中...</span>
+                </div>
+                <p class="novel-description" id="novelDescription">加载小说详情中...</p>
+                
+                <div class="novel-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="viewCount">0</div>
+                        <div class="stat-label">阅读</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="likeCount">0</div>
+                        <div class="stat-label">点赞</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="commentCount">0</div>
+                        <div class="stat-label">评论</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="chapterCount">0</div>
+                        <div class="stat-label">章节</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 章节列表 -->
+        <div class="chapters-section">
+            <h2 class="section-title">
+                章节列表
+                <span id="chapterCountTitle">共0章</span>
+            </h2>
+            <div class="chapters-list" id="chaptersList">
+                <div class="loading">加载章节中...</div>
+            </div>
+        </div>
+        
+        <!-- 评论区域 -->
+        <div class="comments-section">
+            <h2 class="section-title">读者评论</h2>
+            
+            <!-- 评论表单（需要登录） -->
+            <div class="comment-form" id="commentForm">
+                <textarea class="comment-input" id="commentInput" 
+                          placeholder="写下你的评论...（需要登录）" 
+                          disabled></textarea>
+                <div class="comment-submit">
+                    <button class="btn" onclick="checkCommentPermission()">发表评论</button>
+                </div>
+            </div>
+            
+            <!-- 评论列表 -->
+            <div class="comments-list" id="commentsList">
+                <div class="loading">加载评论中...</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // API配置
+        const API_URL = 'https://novel-platform-api.sunlongyun1030.workers.dev';
+        
+        // 获取URL参数中的小说ID
+        function getNovelIdFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+        
+        // 检查登录状态
+        function checkLogin() {
+            const token = localStorage.getItem('token');
+            return !!token;
+        }
+        
+        // 获取用户信息
+        function getUserInfo() {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    return JSON.parse(userStr);
+                } catch (e) {
+                    console.error('解析用户信息失败:', e);
+                }
+            }
+            return null;
+        }
+        
+        // 更新导航栏
+        function updateNavbar() {
+            const user = getUserInfo();
+            const userGreeting = document.getElementById('userGreeting');
+            
+            if (!userGreeting) return;
+            
+            if (user) {
+                userGreeting.innerHTML = `
+                    <span style="color: #4f46e5; font-weight: 600;">👤 ${user.username}</span>
+                    <button class="btn" onclick="logout()" style="margin-left: 10px; background: #ef4444;">
+                        退出
+                    </button>
+                `;
+            } else {
+                userGreeting.innerHTML = `
+                    <a href="login.html" class="btn">登录/注册</a>
+                `;
+            }
+        }
+        
+        // 退出登录
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // 检查发布权限
+        function checkPublishPermission() {
+            if (checkLogin()) {
+                window.location.href = 'publish.html';
+            } else {
+                if (confirm('发布小说需要登录，是否前往登录页面？')) {
+                    window.location.href = 'login.html';
+                }
+            }
+        }
+        
+        // 检查评论权限
+        function checkCommentPermission() {
+            if (checkLogin()) {
+                // 已登录，启用评论框
+                const commentInput = document.getElementById('commentInput');
+                commentInput.disabled = false;
+                commentInput.focus();
+                commentInput.placeholder = '写下你的评论...';
+            } else {
+                // 未登录，提示登录
+                if (confirm('发表评论需要登录，是否前往登录页面？')) {
+                    window.location.href = 'login.html';
+                }
+            }
+        }
+        
+        // 加载小说详情
+        async function loadNovelDetail() {
+            const novelId = getNovelIdFromURL();
+            if (!novelId) {
+                document.getElementById('novelTitle').textContent = '未找到小说';
+                return;
+            }
+            
+            try {
+                // 加载小说基本信息
+                const response = await fetch(`${API_URL}/api/novels/${novelId}`);
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    const novel = data.data;
+                    
+                    // 更新页面信息
+                    document.getElementById('novelTitle').textContent = novel.title || '未命名小说';
+                    document.getElementById('novelTitleBreadcrumb').textContent = novel.title || '小说详情';
+                    document.getElementById('novelAuthor').textContent = `作者：${novel.author_name || '匿名'}`;
+                    document.getElementById('novelCategory').textContent = `分类：${novel.category || '未分类'}`;
+                    document.getElementById('novelStatus').textContent = `状态：${novel.status === 'published' ? '已发布' : '草稿'}`;
+                    document.getElementById('novelDescription').textContent = novel.description || '暂无简介';
+                    
+                    // 更新统计信息
+                    document.getElementById('viewCount').textContent = novel.view_count || 0;
+                    document.getElementById('likeCount').textContent = novel.like_count || 0;
+                    document.getElementById('commentCount').textContent = novel.comment_count || 0;
+                    document.getElementById('chapterCount').textContent = novel.chapter_count || 0;
+                    document.getElementById('chapterCountTitle').textContent = `共${novel.chapter_count || 0}章`;
+                    
+                    // 设置封面颜色
+                    const colors = [
+                        'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                        'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                        'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                        'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                        'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
+                    ];
+                    const colorIndex = novel.id.charCodeAt(0) % colors.length;
+                    document.getElementById('novelCover').style.background = colors[colorIndex];
+                    document.getElementById('novelCover').textContent = novel.title ? novel.title.charAt(0) : '📖';
+                    
+                    // 加载章节
+                    loadChapters(novelId);
+                    
+                    // 加载章节
+                    loadChapters(novelId);
+                    
+                    // 加载评论
+                    loadComments(novelId);
+                    
+                } else {
+                    document.getElementById('novelTitle').textContent = '加载失败';
+                    document.getElementById('novelDescription').textContent = '无法加载小说详情，请稍后重试';
+                }
+            } catch (error) {
+                console.error('加载小说详情失败:', error);
+                document.getElementById('novelTitle').textContent = '网络错误';
+                document.getElementById('novelDescription').textContent = '无法连接到服务器，请检查网络连接';
+            }
+        }
+        
+        // 加载章节
+        async function loadChapters(novelId) {
+            try {
+                const response = await fetch(`${API_URL}/api/novels/${novelId}/chapters`);
+                const data = await response.json();
+                
+                const chaptersList = document.getElementById('chaptersList');
+                
+                if (response.ok && data.success && data.data.length > 0) {
+                    const chapters = data.data;
+                    let html = '';
+                    
+                    chapters.forEach((chapter, index) => {
+                        const wordCount = chapter.content ? chapter.content.replace(/\s/g, '').length : 0;
+                        html += `
+                            <div class="chapter-item">
+                                <div class="chapter-info">
+                                    <div class="chapter-title">第${index + 1}章 ${chapter.title}</div>
+                                    <div class="chapter-meta">${wordCount}字 · ${formatDate(chapter.created_at)}</div>
+                                </div>
+                                <button class="btn" onclick="readChapter('${novelId}', ${chapter.order})">
+                                    阅读
+                                </button>
+                            </div>
+                        `;
+                    });
+                    
+                    chaptersList.innerHTML = html;
+                } else {
+                    chaptersList.innerHTML = '<div class="empty">暂无章节</div>';
+                }
+            } catch (error) {
+                console.error('加载章节失败:', error);
+                document.getElementById('chaptersList').innerHTML = '<div class="error">加载章节失败</div>';
+            }
+        }
+        
+        // 加载评论
+        async function loadComments(novelId) {
+            try {
+                const response = await fetch(`${API_URL}/api/novels/${novelId}/comments`);
+                const data = await response.json();
+                
+                const commentsList = document.getElementById('commentsList');
+                
+                if (response.ok && data.success && data.data.length > 0) {
+                    const comments = data.data;
+                    let html = '';
+                    
+                    comments.forEach(comment => {
+                        html += `
+                            <div class="comment-item">
+                                <div class="comment-header">
+                                    <div class="comment-author">${comment.author_name || '匿名读者'}</div>
+                                    <div class="comment-time">${formatDate(comment.created_at)}</div>
+                                </div>
+                                <div class="comment-content">${comment.content}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    commentsList.innerHTML = html;
+                } else {
+                    commentsList.innerHTML = '<div class="empty">暂无评论，快来发表第一条评论吧！</div>';
+                }
+            } catch (error) {
+                console.error('加载评论失败:', error);
+                document.getElementById('commentsList').innerHTML = '<div class="error">加载评论失败</div>';
+            }
+        }
+        
+        // 阅读章节
+        function readChapter(novelId, chapterOrder) {
+            window.location.href = `chapter.html?novel=${novelId}&chapter=${chapterOrder}`;
+        }
+        
+        // 格式化日期
+        function formatDate(timestamp) {
+            if (!timestamp) return '刚刚';
+            
+            const date = new Date(timestamp * 1000);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 60) {
+                return `${diffMins}分钟前`;
+            } else if (diffHours < 24) {
+                return `${diffHours}小时前`;
+            } else if (diffDays < 30) {
+                return `${diffDays}天前`;
+            } else {
+                return date.toLocaleDateString('zh-CN');
+            }
+        }
+        
+        // 页面加载时执行
+        window.addEventListener('load', () => {
+            updateNavbar();
+            loadNovelDetail();
+            
+            // 如果有用户登录，启用评论功能
+            if (checkLogin()) {
+                const commentInput = document.getElementById('commentInput');
+                commentInput.disabled = false;
+                commentInput.placeholder = '写下你的评论...';
+                
+                // 添加评论提交功能
+                commentInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && e.ctrlKey) {
+                        submitComment();
+                    }
+                });
+            }
+            
+            console.log('🎉 小说详情页面已加载（游客可访问）');
+            console.log('📖 小说ID:', getNovelIdFromURL());
+        });
+        
+        // 提交评论（需要后端API支持）
+        async function submitComment() {
+            const commentInput = document.getElementById('commentInput');
+            const content = commentInput.value.trim();
+            
+            if (!content) {
+                alert('请输入评论内容');
+                return;
+            }
+            
+            const novelId = getNovelIdFromURL();
+            if (!novelId) return;
+            
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/api/novels/${novelId}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ content: content })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    alert('评论发表成功！');
+                    commentInput.value = '';
+                    loadComments(novelId); // 重新加载评论
+                } else {
+                    alert(`发表失败: ${data.message}`);
+                }
+            } catch (error) {
+                console.error('发表评论失败:', error);
+                alert('网络错误，请稍后重试');
+            }
+        }
+        
+        // 添加评论提交按钮事件
+        document.addEventListener('DOMContentLoaded', () => {
+            const commentBtn = document.querySelector('.comment-submit .btn');
+            if (commentBtn) {
+                commentBtn.onclick = submitComment;
+            }
+        });

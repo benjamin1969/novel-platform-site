@@ -801,11 +801,11 @@
                     <div class="sidebar-card">
                         <h3 class="card-title">快速链接</h3>
                         <div class="quick-links">
-                            <a href="/novels" class="quick-link">
+                            <a href="novels.html" class="quick-link">
                                 <div class="link-title">浏览所有小说</div>
                                 <div class="link-desc">探索更多精彩作品</div>
                             </a>
-                            <a href="/publish" class="quick-link">
+                            <a href="javascript:void(0)" onclick="checkPublishPermission()" class="quick-link">
                                 <div class="link-title">发布你的作品</div>
                                 <div class="link-desc">开始创作之旅</div>
                             </a>
@@ -906,6 +906,20 @@
     
     <!-- JavaScript -->
     <script>
+        // 检查发布权限
+        function checkPublishPermission() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                // 已登录，跳转到发布页面
+                window.location.href = 'publish.html';
+            } else {
+                // 未登录，提示登录
+                if (confirm('发布小说需要登录，是否前往登录页面？')) {
+                    window.location.href = 'login.html';
+                }
+            }
+        }
+        
         // 页面加载完成后执行
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎉 小说网站原版界面已加载');
