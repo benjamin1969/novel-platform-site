@@ -627,25 +627,25 @@
                 
                 <!-- 导航菜单 -->
                 <nav class="nav-menu">
-                    <a href="/" class="nav-link">
+                    <a href="index.html" class="nav-link">
                         <svg width="16" height="16">
                             <use href="#icon-home"></use>
                         </svg>
                         <span>首页</span>
                     </a>
-                    <a href="/novels" class="nav-link">
+                    <a href="index.html#novels" class="nav-link">
                         <svg width="16" height="16">
                             <use href="#icon-compass"></use>
                         </svg>
                         <span>发现</span>
                     </a>
-                    <a href="/publish" class="nav-link">
+                    <a href="index.html#publish" class="nav-link">
                         <svg width="16" height="16">
                             <use href="#icon-pen"></use>
                         </svg>
                         <span>创作</span>
                     </a>
-                    <a href="/ranking" class="nav-link">
+                    <a href="index.html#ranking" class="nav-link">
                         <svg width="16" height="16">
                             <use href="#icon-chart"></use>
                         </svg>
@@ -660,7 +660,7 @@
                             <use href="#icon-search"></use>
                         </svg>
                     </button>
-                    <button class="login-btn" onclick="window.location.href='/login'">
+                    <button class="login-btn" onclick="window.location.href='login.html'">
                         <div class="user-avatar">
                             <svg width="16" height="16">
                                 <use href="#icon-user"></use>
@@ -912,6 +912,9 @@
             console.log('🔗 后端API: https://novel-platform-api.sunlongyun1030.workers.dev');
             console.log('💡 邀请码: 2014');
             
+            // 处理URL路由
+            handlePageRouting();
+            
             // 模拟加载动画
             setTimeout(() => {
                 const loadingElements = document.querySelectorAll('.loading');
@@ -923,7 +926,7 @@
             
             // 登录按钮点击事件
             document.querySelector('.login-btn').addEventListener('click', function() {
-                window.location.href = '/login';
+                window.location.href = 'login.html';
             });
             
             // 搜索按钮点击事件
@@ -949,6 +952,20 @@
             
             window.addEventListener('resize', handleResize);
             handleResize(); // 初始调用
+            
+            // 页面路由处理函数
+            function handlePageRouting() {
+                const hash = window.location.hash;
+                if (hash) {
+                    // 处理页面内锚点
+                    setTimeout(() => {
+                        const element = document.querySelector(hash);
+                        if (element) {
+                            element.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }, 100);
+                }
+            }
         });
         
         // 键盘快捷键
